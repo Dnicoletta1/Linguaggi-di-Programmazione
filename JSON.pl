@@ -2,13 +2,20 @@
 
 %%json/1
 %%start operation
-json(X) :-
-    string_to_list_of_characters(X, Y),
-    is_a_string(Y).
+json_number(X) :-
+    atom_chars(X, Y),
+    is_a_number(Y),!.
 
+json_string(X) :-
+    atom_codes(X, Y),
+    is_a_string(Y),!.
+
+json_array(X) :-
+    atom_chars(X, Y),
+    is_array(Y),!.
 
 %% is_a_number/1
-%% check that it is an positive, negative or decimal number
+%% true whene X is an positive, negative or decimal number
 
 is_a_number([X]) :-
     is_digit(X),!.
@@ -23,16 +30,24 @@ is_a_number(['-'| Xs]) :-
 is_a_number(['.' | Xs]) :-
     is_a_number(Xs).
 
-%% is_a_string/1
-%%check that it is an string
 
-is_a_string([X]) :-
-    atom_length(X,1),
-    char_type(X, lower),!.
+
+%% is_a_string/1
+%%true when X is an string
+
+is_a_string([Y]) :-
+    Y > 65,
+    Y < 122.
+
+%%is_a_string([X]) :-
+%%    atom_codes(X, Y),
+%%    is_a_string(Y).
 
 is_a_string([X | Xs]) :-
     is_a_string([X]),
     is_a_string(Xs).
+
+
 
 
 %%to_list/2
@@ -44,6 +59,43 @@ maplist( number_to_character,
 Xs, Characters ).
 
 number_to_character(Number, Character) :-
-name(Character, [Number]).
+    name(Character, [Number]).
+
+
+
+%%is_whitespace/1
+%%tre when X is an whitespace
+
+is_whitespace(X) :-
+    X = ' '.
+
+
+
+%%is_array/1
+%%true whene X is an array
+
+is_array(['[', ' ', ']']) :-
+    !.
+
+is_array([_ | ']']) :-
+    !.
+
+is_array(['[' | Xs]) :-
+    is_a_string(Xs).
+
+is_array(['[' | Xs]) :-
+    is_a_number(Xs).
+
+%%is_array([_|X]) :-
+%%    is_a_string(X).
+
+is_array([_|X]) :-
+    is_a_number(X).
+
+    
+
+
+
+
 
 %%%% end of file -- JSON.pl
