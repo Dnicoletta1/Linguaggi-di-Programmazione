@@ -36,8 +36,10 @@ is_a_number(['.' | Xs]) :-
 %%true when X is an string
 
 is_a_string([Y]) :-
-    Y > 65,
-    Y < 122.
+    Y >= 0,
+    Y =< 127.
+
+
 
 %%is_a_string([X]) :-
 %%    atom_codes(X, Y),
@@ -46,20 +48,6 @@ is_a_string([Y]) :-
 is_a_string([X | Xs]) :-
     is_a_string([X]),
     is_a_string(Xs).
-
-
-
-
-%%to_list/2
-%%conver string to list
-
-to_list(String, Characters) :-
-name(String, Xs),
-maplist( number_to_character,
-Xs, Characters ).
-
-number_to_character(Number, Character) :-
-    name(Character, [Number]).
 
 
 
@@ -74,8 +62,10 @@ is_whitespace(X) :-
 %%is_array/1
 %%true whene X is an array
 
-is_array(['[', ' ', ']']) :-
+is_array(['[', ']']) :-
     !.
+
+
 
 is_array([_ | ']']) :-
     !.
@@ -91,11 +81,5 @@ is_array(['[' | Xs]) :-
 
 is_array([_|X]) :-
     is_a_number(X).
-
-    
-
-
-
-
 
 %%%% end of file -- JSON.pl
