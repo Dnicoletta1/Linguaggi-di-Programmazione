@@ -1,5 +1,19 @@
 %%%% -*- Mode: Prolog -*-
 
+
+jsonparse(JsonString, Object).
+
+
+
+
+
+jsonacces(Jsonobj, Fields, Result).
+
+
+
+
+
+
 %%json/1
 %%start operation
 json_number(X) :-
@@ -62,24 +76,19 @@ is_whitespace(X) :-
 %%is_array/1
 %%true whene X is an array
 
-is_array(['[', ']']) :-
-    !.
+is_array([Xs]) :-
+    is_a_value(Xs).
+
+is_array("[", " ", "]").
 
 
 
-is_array([_ | ']']) :-
-    !.
-
-is_array(['[' | Xs]) :-
+is_a_value([Xs]) :-
     is_a_string(Xs).
 
-is_array(['[' | Xs]) :-
+is_a_value([Xs]) :-
     is_a_number(Xs).
 
-%%is_array([_|X]) :-
-%%    is_a_string(X).
 
-is_array([_|X]) :-
-    is_a_number(X).
 
 %%%% end of file -- JSON.pl
