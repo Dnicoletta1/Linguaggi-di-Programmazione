@@ -1,15 +1,75 @@
 %%%% -*- Mode: Prolog -*-
 
 
-jsonparse(JsonString, Object).
+%%jsonparse/2
+
+%jsonparse(JsonString, Object):-
+%    string_codes(JsonString, JsonCode),
+%    remove_space_elements(JsonCode, JsonFree).
 
 
+%jsonacces(Jsonobj, Fields, Result).
+
+json(X, Y) :-
+    string_codes(X, Z),
+    remove_space_elements(Z, W),
+    string_codes(Y, W).
 
 
+%%remove_space_elements/2
+%%ture whene Y is equals to X but whitout the space elements
 
-jsonacces(Jsonobj, Fields, Result).
+
+remove_space_elements(X, Y) :-
+    remove(32, X, W),
+    remove(10, W, Z),
+    remove(9, Z, Y),
+    !.
 
 
+remove(_, [], []).
+remove(X, [X | Xs], R) :-
+    remove(X, Xs, R).
+remove(X, [Y | Ys], [Y | Z]) :-
+    X \= Y,
+    remove(X, Ys, Z).
+
+%%is_space_element/1
+%%true whene X is an space element
+
+is_space_element(X) :-
+    is_whitespace(X),
+    !.
+
+is_space_element(X) :-
+    is_newline(X),
+    !.
+
+is_space_element(X) :-
+    is_tab(X),
+    !.
+
+
+%%is_whitespace/1
+%%true whene X is a whitespace
+is_whitespace(X) :-
+    char_code(' ', Y),
+    X = Y,
+    !.
+
+%%is_newline/1
+%%true whene X is a newline
+is_newline(X) :-
+    char_code('\n', Y),
+    X = Y,
+    !.
+
+%%is_tab/1
+%%true whene is a tab
+is_tab(X) :-
+    char_code('\t', Y),
+    X = Y,
+    !.
 
 
 
@@ -62,14 +122,6 @@ is_a_string([Y]) :-
 is_a_string([X | Xs]) :-
     is_a_string([X]),
     is_a_string(Xs).
-
-
-
-%%is_whitespace/1
-%%tre when X is an whitespace
-
-is_whitespace(X) :-
-    X = ' '.
 
 
 
